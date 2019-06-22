@@ -9,6 +9,7 @@ RUN npm i connect-multiparty
 
 COPY . .
 
+RUN mkdir /usr/src/app/resultado
 RUN chmod 777 -R /usr/src/app/resultado
 
 
