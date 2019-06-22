@@ -1,2 +1,2 @@
 start:
-	docker build -t inova-cuentas . && docker-compose up -d
+	docker build -t inova-responde . && docker-compose up -d
