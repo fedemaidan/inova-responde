@@ -1,6 +1,6 @@
 version: "2"
 services:
-  inova-cuentas:
+  inova-responde:
     environment:
     - DB_USER=milito
     - DB_PASS=lautaro
@@ -8,8 +8,8 @@ services:
     - ML_CLIENT_ID=3659532861516182
     - ML_CLIENT_SECRET=EezWxXN7ip0Jd55Gvyp4Vn7xU0phnrxh
     - DB_NAME=mercadolibre
-    container_name: inova-cuentas
-    image: inova-cuentas
+    container_name: inova-responde
+    image: inova-responde
     restart: always
     ports:
       - "85:8080"
