@@ -177,6 +177,7 @@
                     <table id="tablaCuentas" class="table">
                         <tr>
                           <th>Nickname</th>
+                          <th>Borrar</th>
                         </tr>
                     </table>
                   </div>
@@ -230,7 +231,7 @@
                   }).done(function(data) {
                       var i = 0;
                       data.data.forEach( (cuenta) => {
-                        $('#tablaCuentas tr:last').after('<tr><td>'+cuenta.nickname+'</td></tr>');
+                        $('#tablaCuentas tr:last').after('<tr><td>'+cuenta.nickname+'</td><td><a href="https://mlgestion.net/cuentas/delete?nickname='+cuenta.nickname+'"><span class="fa fa-trash" style="color: red;"></a></td></tr>');
                       })
                   });
 

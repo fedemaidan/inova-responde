@@ -22,5 +22,16 @@ module.exports.cuentas = (req, res ) => {
 
 }
 
+module.exports.borrarCuenta = (req, res ) => {
+	console.log(req.query.nickname)
+	 UserML.remove({ nickname: req.query.nickname}, (err, data) =>{
+	 	console.log(err)
+	 	console.log(data)
+	 	res.json({success: true})	
+	 })
+} 
+
+
+
 
 

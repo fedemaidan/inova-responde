@@ -9,6 +9,7 @@ var multipartMiddleware = multipart();
 
 
 router.get('/cuentas', 			datosCuenta.cuentas);
+router.get('/cuentas/delete', 	datosCuenta.borrarCuenta);
 
 router.get('/iniciarConML', 	agregarCuentaController.iniciarMl);
 router.get('/auth_ml', 			agregarCuentaController.authMl);
