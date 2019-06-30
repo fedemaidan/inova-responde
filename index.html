@@ -225,16 +225,8 @@
               $(document).ready(function(){ 
 
                 consultarEstado()
-
-                $.ajax({
-                    url: "https://mlgestion.net/cuentas"
-                  }).done(function(data) {
-                      var i = 0;
-                      data.data.forEach( (cuenta) => {
-                        $('#tablaCuentas tr:last').after('<tr><td>'+cuenta.nickname+'</td><td><a href="https://mlgestion.net/cuentas/delete?nickname='+cuenta.nickname+'"><span class="fa fa-trash" style="color: red;"></a></td></tr>');
-                      })
-                  });
-
+                cargarCuentas()
+                
                 
             })
 
@@ -271,6 +263,28 @@
                             alert(data.message)
                             consultarEstado()
                         });
+              }
+
+              function borrarCuenta(nickname) {
+                 $.ajax({
+                          url: "https://mlgestion.net/cuentas/delete?nickname="+nickname
+                        }).done(function(data) {
+                            if (data.success)
+                              alert("Cuenta eliminada")
+                            else alert("Fallo eliminando cuenta")
+                        });
+              }
+
+              function cargarCuentas() {
+                $.ajax({
+                    url: "https://mlgestion.net/cuentas"
+                  }).done(function(data) {
+                    $("#tablaCuentas").empty();
+                      var i = 0;
+                      data.data.forEach( (cuenta) => {
+                        $('#tablaCuentas tr:last').after('<tr><td>'+cuenta.nickname+'</td><td><a onclick="borrarCuenta(\''+cuenta.nickname+'\')"><span class="fa fa-trash" style="color: red;"></a></td></tr>');
+                      })
+                  });
               }
             </script>
           </div>
