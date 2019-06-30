@@ -43,8 +43,9 @@ function cargar(nickname, token, offset)  {
 function guardarEnCSV(req, respuesta, pregunta, nickname, token) {
   meliObject.get('items/'+pregunta.item_id, {token: token}, (req2, item) => {
       meliObject.get('users/'+pregunta.from.id, {}, (req3, from) => {
-          if (!(validador.errorEnPeticion(req, respuesta))) {                                                                                                                                                                                    
-          var row = "\n"+pregunta.id+","+nickname+","+item.seller_custom_field+","+item.title+","+item.permalink+","+item.price+","+item.shipping.mode+","+item.listing_type_id+","+pregunta.date_created+","+pregunta.text+","+from.nickname+","+from.points+","+from.permalink+","+from.address.city+",respuesta"
+          if (!(validador.errorEnPeticion(req, respuesta))) {
+
+          var row = "\n"+pregunta.id+","+nickname+","+_(item.seller_custom_field)+","+_(item.title)+","+_(item.permalink)+","+item.price+","+_(item.shipping.mode)+","+_(item.listing_type_id)+","+pregunta.date_created+","+_(pregunta.text)+","+_(from.nickname)+","+from.points+","+_(from.permalink)+","+_(from.address.city)+",respuesta"
           fs.appendFile("resultado/retorno.csv", row, "utf8", (err) =>{ if (err) console.log(err)})
         
         }
@@ -54,4 +55,17 @@ function guardarEnCSV(req, respuesta, pregunta, nickname, token) {
         }
       })
   })
+}
+
+function _(texto) {
+  String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+};
+
+  var str = ""
+  if (texto)
+    str = texto.replaceAll('"',"'") 
+  
+  return '"'+str+'"' 
 }

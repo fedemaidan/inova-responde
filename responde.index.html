@@ -118,27 +118,94 @@
       color: white;
       background-color: #3b5998;
     }
+
+    .shortcut {
+      color: #f5585d!important;
+      cursor: pointer;
+    }
+    .shortcut:hover, .shortcut:hover > span {
+      color: #f5585d!important;
+      text-decoration: none;
+    }
+
+    .shortcut-message:hover, .shortcut-message:hover > span {
+      color: #f5585d!important;
+      text-decoration: none;
+    }
+
+    .shortcut-message {
+      color: #f5585d!important;
+      cursor: pointer;
+    }
+
+    .shortcut-message span.fa {
+        font-size: 30px;
+        color: #f5585d;
+        background-color: #f6f6f6;
+        padding: 35px;
+        border-radius: 100px;
+    }
+
+    .shortcut span.fa {
+        font-size: 30px;
+        color: #f5585d;
+        background-color: #f6f6f6;
+        padding: 35px;
+        border-radius: 100px;
+    }
+    .shortcut h4 {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+
   </style>
 </head>
 <body>
   <div class="container">
     <div class="row">
+<div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h5 class="card-title text-center">Cuentas</h5>
+              <div class="row text-center">
+                <div class="col-md-12 col-sm-12">
+                  <a class="shortcut" onclick="agregarCuenta()">
+                    <span class="fa fa-plus"></span>
+                  </a>
+                  <div class="table-responsive">
+                    <table id="tablaCuentas" class="table">
+                        <tr>
+                          <th>Nickname</th>
+                        </tr>
+                    </table>
+                  </div>
+                 </div>
+              </div>
 
+        </div>
+      </div>
+      </div>
       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
 
         <div class="card card-signin my-5">
           <div class="card-body">
             <h5 class="card-title text-center">Inova-responde</h5>
-            <p id="estadoActualizadas">
-              
-            </p>
-            <p id="estadoEnviadas">
-              
-            </p>
-            <p id="estadoError">
-              
-            </p>
-            <form class="form-signin" action="http://localhost:82/csv/preguntas" method="POST" enctype="multipart/form-data">
+            <div class="table-responsive">
+              <table id="tablaEstado" class="table">
+                  <tr>
+                    <th>Actualizadas</th>
+                    <th>Enviadas</th>
+                    <th>Errores</th>
+                  </tr>
+                  <tr>
+                    <td id="estadoActualizadas"></td>
+                    <td id="estadoEnviadas"></td>
+                    <td id="estadoError"></td>
+                  </tr>
+              </table>
+            </div>
+            <form class="form-signin" action="https://mlgestion.net/csv/preguntas" method="POST" enctype="multipart/form-data">
               <div class="form-label-group">
                 <div class="input-group">
                   <div class="custom-file">
@@ -147,12 +214,10 @@
                 </div>
               </div>
 
-              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Responder</button>
+              <button class="btn btn-lg btn-success btn-block text-uppercase" type="submit">Responder</button>
               <hr class="my-4">
-              <a class="btn btn-lg btn-info btn-block text-uppercase" href="http://localhost:82/csv/create"> Actualizar CSV de preguntas <span class="badge badge-light" ></span></a>
-              <a class="btn btn-lg btn-facebook btn-block text-uppercase" href="http://localhost:82/csv/preguntas">Descargar preguntas <span class="badge badge-light" ></span></a>
-              <a class="btn btn-lg btn-google btn-block text-uppercase" href="http://localhost:82/csv/status">Descargar estado <span class="badge badge-light" ></span></a>
-
+              <a class="btn btn-lg btn-info btn-block text-uppercase" onclick="crearCSV()"> Actualizar CSV de preguntas <span class="badge badge-light" ></span></a>
+              <a class="btn btn-lg btn-facebook btn-block text-uppercase" href="https://mlgestion.net/csv/preguntas">Descargar preguntas <span class="badge badge-light" ></span></a>
             </form>
 
             <script>
@@ -160,13 +225,35 @@
 
                 consultarEstado()
 
-                function consultarEstado() {
+                $.ajax({
+                    url: "https://mlgestion.net/cuentas"
+                  }).done(function(data) {
+                      var i = 0;
+                      data.data.forEach( (cuenta) => {
+                        $('#tablaCuentas tr:last').after('<tr><td>'+cuenta.nickname+'</td></tr>');
+                      })
+                  });
+
+                
+            })
+
+              function agregarCuenta() {
+                var logout = "https://www.mercadolibre.com/jms/mla/lgz/logout";
+                var wind = window.open(logout,"_blank");
+                
+                setTimeout(function() { 
+                  wind.close()
+                  window.location.replace("https://mlgestion.net/iniciarConML");
+                }, 1500);
+
+              }
+              function consultarEstado() {
                       $.ajax({
-                          url: "http://localhost:82/csv/status"
+                          url: "https://mlgestion.net/csv/status"
                         }).done(function(data) {
-                            var actualizadas = "Cuentas actualizadas "+data.cuentasActualizadas
-                            var respuestasConError = "Respuestas con error "+data.respuestasConError
-                            var respuestasEnviadas = "Respuestas enviadas "+data.respuestasEnviadas
+                            var actualizadas = data.cuentasActualizadas
+                            var respuestasConError = data.respuestasConError
+                            var respuestasEnviadas = data.respuestasEnviadas
                             console.log(data)
                             $("#estadoActualizadas").text(actualizadas)
                             $("#estadoError").text(respuestasConError)
@@ -175,7 +262,15 @@
                             setInterval(consultarEstado, 30000);
                         });
                 }
-            })
+
+              function crearCSV() {
+                 $.ajax({
+                          url: "https://mlgestion.net/csv/create"
+                        }).done(function(data) {
+                            alert(data.message)
+                            consultarEstado()
+                        });
+              }
             </script>
           </div>
         </div>

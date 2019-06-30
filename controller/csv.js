@@ -82,6 +82,9 @@ module.exports.post = async function (req,res) {
     var idPregunta= jsonArray[i]["ID-PREGUNTA"]
     var respuesta= jsonArray[i]["Respuesta"]
     var nickname= jsonArray[i]["Cuenta propia"]
-    responder(nickname, idPregunta, respuesta)
+    if (respuesta != "respuesta" && respuesta != "" )
+      responder(nickname, idPregunta, respuesta)
   }
+
+  res.json({success: true, message: "Se estan enviando las respuestas"});
 }

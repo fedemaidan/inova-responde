@@ -2,10 +2,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
  
 var UserMLSchema = new Schema({
-  id_cuenta: {
-        type: String,
-        required: true
-    },
   token: {
         type: String,
         unique: true,

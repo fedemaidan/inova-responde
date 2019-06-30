@@ -11,32 +11,23 @@ var urlActual 	= process.env.URL_ACTUAL;
 mongoose.connect(config.database);
 
 module.exports.iniciarMl = function (req, res ) {
-	var cuenta_id = req.query.cuenta_id;
-  var url = meliObject.getAuthURL(urlActual+'/auth_ml?cuenta_id='+cuenta_id)
-  console.log(url)
+  var url = meliObject.getAuthURL(urlActual+'/auth_ml')
   return res.redirect(url);
 }
 
 
 module.exports.authMl = function (req, res ) {
-  var cuenta_id = req.query.cuenta_id;
-  
-    if (!cuenta_id ) {
-	    res.json({success: false, msg: 'Falta cargar usuario.'});
-	} else {
-	    autorizarEnML(req.query.code, urlActual+'/auth_ml?cuenta_id='+cuenta_id, (req2, reso) => {
-	      if (!(validador.errorEnPeticion(req2, reso))) {
-            console.log("Agrego usuario "+cuenta_id);
-	          cargarDatosDeUsuario(cuenta_id,reso);
-	          res.redirect(urlActual);
-	       }
-	       else {
-	            res.json({success: false, msg: 'Hubo un problema con ML para registrar la cuenta. Por favor pruebe mas tarde'});
-	          }
-	    })
-	}
+    autorizarEnML(req.query.code, urlActual+'/auth_ml', (req2, reso) => {
+      if (!(validador.errorEnPeticion(req2, reso))) {
+          console.log("Agrego usuario ");
+          cargarDatosDeUsuario(reso);
+          res.redirect(urlActual);
+       }
+       else {
+            res.json({success: false, msg: 'Hubo un problema con ML para registrar la cuenta. Por favor pruebe mas tarde'});
+          }
+    })
 }
-
 
 function autorizarEnML(code, redirect_uri, callback) {
         var self = this;
@@ -53,7 +44,7 @@ function autorizarEnML(code, redirect_uri, callback) {
         });
     };
 
- function cargarDatosDeUsuario(id_cuenta, reso) {
+ function cargarDatosDeUsuario(reso) {
  	
   meliObject.get('users/me?access_token='+reso.access_token, (req2, datos) => {
         if (!(validador.errorEnPeticion(req2, datos))) {
@@ -61,7 +52,6 @@ function autorizarEnML(code, redirect_uri, callback) {
           expiration_date = expiration_date.getTime() + (reso.expires_in * 1000);
     
           var newUser = new UserML({
-              id_cuenta: id_cuenta,
               id_ml: reso.user_id,
               token: reso.access_token,
               refresh_token: reso.refresh_token,
@@ -83,7 +73,7 @@ function autorizarEnML(code, redirect_uri, callback) {
                 return {success: false, msg: 'Username ya existe.'};
               }
               else {
-               	return {success: true, msg: 'Cuenta registrada con exito'};
+               	return {success: true, msg: ' registrada con exito'};
               }
             })
         }
