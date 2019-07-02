@@ -44,8 +44,8 @@ function guardarEnCSV(req, respuesta, pregunta, nickname, token) {
   meliObject.get('items/'+pregunta.item_id, {token: token}, (req2, item) => {
       meliObject.get('users/'+pregunta.from.id, {}, (req3, from) => {
           if (!(validador.errorEnPeticion(req, respuesta))) {
-
-          var row = "\n"+pregunta.id+","+nickname+","+_(item.seller_custom_field)+","+_(item.title)+","+_(item.permalink)+","+item.price+","+_(item.shipping.mode)+","+_(item.listing_type_id)+","+pregunta.date_created+","+_(pregunta.text)+","+_(from.nickname)+","+from.points+","+_(from.permalink)+","+_(from.address.city)+",respuesta"
+            var shipping = item.shipping !== "undefined" ? item.shipping.mode :"" 
+          var row = "\n"+pregunta.id+","+nickname+","+_(item.seller_custom_field)+","+_(item.title)+","+_(item.permalink)+","+item.price+","+_(shipping)+","+_(item.listing_type_id)+","+pregunta.date_created+","+_(pregunta.text)+","+_(from.nickname)+","+from.points+","+_(from.permalink)+","+_(from.address.city)+",respuesta"
           fs.appendFile("resultado/retorno.csv", row, "utf8", (err) =>{ if (err) console.log(err)})
         
         }
