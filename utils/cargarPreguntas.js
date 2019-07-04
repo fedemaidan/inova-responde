@@ -53,7 +53,7 @@ function guardarEnCSV(req, respuesta, pregunta, nickname, token) {
                 meliObject.get('questions/search', args, (req2, preguntasPrevias) => {
                       var preguntasExt = ""
                       for (var i = 0; i < preguntasPrevias.length; i++) {
-                            preguntasExt = preguntasPrevias[i].text + ","
+                            preguntasExt += preguntasPrevias[i].text + ","
                       }
 
                       var shipping = typeof item.shipping !== "undefined" ? item.shipping.mode : "" 
