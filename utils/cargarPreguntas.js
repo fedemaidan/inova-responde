@@ -57,7 +57,7 @@ function guardarEnCSV(req, respuesta, pregunta, nickname, token) {
                       }
 
                       var shipping = typeof item.shipping !== "undefined" ? item.shipping.mode : "" 
-                      var row = "\n"+pregunta.id+","+nickname+","+_(item.seller_custom_field)+","+_(item.title)+","+_(item.permalink)+","+item.price+","+_(shipping)+","+_(item.listing_type_id)+","+pregunta.date_created+","+_(pregunta.text)+","+_(from.nickname)+","+from.points+","+_(from.permalink)+","+_(from.address.city)+",respuesta,"+preguntasPrevias.questions.length+","+preguntasPrevias.questions
+                      var row = "\n"+pregunta.id+","+nickname+","+_(item.seller_custom_field)+","+_(item.title)+","+_(item.permalink)+","+item.price+","+_(shipping)+","+_(item.listing_type_id)+","+pregunta.date_created+","+_(pregunta.text)+","+_(from.nickname)+","+from.points+","+_(from.permalink)+","+_(from.address.city)+",respuesta,"+preguntasPrevias.questions.length+","+preguntasExt
                       fs.appendFile("resultado/retorno.csv", row, "utf8", (err) =>{ if (err) console.log(err)})
                   })   
         }
