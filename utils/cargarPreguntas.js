@@ -51,8 +51,12 @@ function guardarEnCSV(req, respuesta, pregunta, nickname, token) {
                               sort: 'date_created_asc'
                             }
                 meliObject.get('questions/search', args, (req2, preguntasPrevias) => {
-                    console.log(preguntasPrevias.questions)
-                     var shipping = typeof item.shipping !== "undefined" ? item.shipping.mode : "" 
+                      var preguntasExt = ""
+                      for (var i = 0; i < preguntasPrevias.length; i++) {
+                            preguntasExt = preguntasPrevias[i].text + ","
+                      }
+
+                      var shipping = typeof item.shipping !== "undefined" ? item.shipping.mode : "" 
                       var row = "\n"+pregunta.id+","+nickname+","+_(item.seller_custom_field)+","+_(item.title)+","+_(item.permalink)+","+item.price+","+_(shipping)+","+_(item.listing_type_id)+","+pregunta.date_created+","+_(pregunta.text)+","+_(from.nickname)+","+from.points+","+_(from.permalink)+","+_(from.address.city)+",respuesta,"+preguntasPrevias.questions.length+","+preguntasPrevias.questions
                       fs.appendFile("resultado/retorno.csv", row, "utf8", (err) =>{ if (err) console.log(err)})
                   })   
