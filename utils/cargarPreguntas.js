@@ -44,10 +44,18 @@ function guardarEnCSV(req, respuesta, pregunta, nickname, token) {
   meliObject.get('items/'+pregunta.item_id, {token: token}, (req2, item) => {
       meliObject.get('users/'+pregunta.from.id, {}, (req3, from) => {
           if (!(validador.errorEnPeticion(req, respuesta))) {
-            var shipping = typeof item.shipping !== "undefined" ? item.shipping.mode : "" 
-            var row = "\n"+pregunta.id+","+nickname+","+_(item.seller_custom_field)+","+_(item.title)+","+_(item.permalink)+","+item.price+","+_(shipping)+","+_(item.listing_type_id)+","+pregunta.date_created+","+_(pregunta.text)+","+_(from.nickname)+","+from.points+","+_(from.permalink)+","+_(from.address.city)+",respuesta"
-            fs.appendFile("resultado/retorno.csv", row, "utf8", (err) =>{ if (err) console.log(err)})
-        
+                var args = {  
+                              item: pregunta.item_id, 
+                              from: pregunta.from.id,
+                              access_token: token,
+                              sort: 'date_created_asc'
+                            }
+                meliObject.get('questions/search', args, (req2, preguntasPrevias) => {
+                    console.log(preguntasPrevias.questions)
+                     var shipping = typeof item.shipping !== "undefined" ? item.shipping.mode : "" 
+                      var row = "\n"+pregunta.id+","+nickname+","+_(item.seller_custom_field)+","+_(item.title)+","+_(item.permalink)+","+item.price+","+_(shipping)+","+_(item.listing_type_id)+","+pregunta.date_created+","+_(pregunta.text)+","+_(from.nickname)+","+from.points+","+_(from.permalink)+","+_(from.address.city)+",respuesta,"+preguntasPrevias.questions.length+","+preguntasPrevias.questions
+                      fs.appendFile("resultado/retorno.csv", row, "utf8", (err) =>{ if (err) console.log(err)})
+                  })   
         }
         else {
           console.log("ERROR: Falló en la solicitud de item de la pregunta.")
@@ -68,4 +76,9 @@ function _(texto) {
     str = texto.replaceAll('"',"'") 
   
   return '"'+str+'"' 
+}
+
+function cargarPreguntasPrevias(req, respuesta, pregunta, username, token) {
+
+  
 }

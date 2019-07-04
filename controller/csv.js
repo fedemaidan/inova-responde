@@ -7,7 +7,7 @@ const fs = require('fs')
 
 module.exports.create = function(req, res) {
 	
-	var csvFileHead = "ID-PREGUNTA, Cuenta propia, SKU Producto, Titulo producto, Link Producto, $ Producto, Forma de envio, Tipo de Publicacion, Fecha/hora: , Pregunta, USUARIO-Pregunta, Puntaje Usuario-Pregunta, Link a Perfil usuario que pregunta, Ubicacion del Usuario, Respuesta";
+	var csvFileHead = "ID-PREGUNTA, Cuenta propia, SKU Producto, Titulo producto, Link Producto, $ Producto, Forma de envio, Tipo de Publicacion, Fecha/hora: , Pregunta, USUARIO-Pregunta, Puntaje Usuario-Pregunta, Link a Perfil usuario que pregunta, Ubicacion del Usuario, Respuesta, Cantiad preguntas previas, preguntas previas";
 	
 	fs.writeFile("resultado/retorno.csv", csvFileHead, (err) => {
 	  if (err) console.log(err);
